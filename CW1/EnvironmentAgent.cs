@@ -33,7 +33,7 @@ class EnvironmentAgent : Agent
             case "start": //this agent only responds to "start" messages
                 string senderID = message.Sender; //get the sender's name so we can reply to them
                 int demand = rand.Next(MinDemand, MaxDemand); //the household's demand in kWh
-                int generation = rand.Next(MinGeneration, MaxGeneration); //the household's demand in kWh
+                int generation = rand.Next(MinGeneration, MaxGeneration); //the household's generated in kWh
                 int priceToBuyFromUtility = rand.Next(MinPriceToBuyFromUtility, MaxPriceToBuyFromUtility); //what the household's utility company
                                                                                                            //charges to buy 1kWh from it
                 int priceToSellToUtility = rand.Next(MinPriceToSellToUtility, MaxPriceToSellToUtility);    //what the household's utility company

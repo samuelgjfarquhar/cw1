@@ -95,7 +95,7 @@ namespace CW1
             {
                 Array.Sort(bidValues);
                 Array.Reverse(bidValues);
-                int winningPrice = bidValues[1]; // second price
+                int winningPrice = bidValues[0]; // first price
                 Console.WriteLine($"[auctioneer]: Auction finished. Sold to {highestBidder} for price {winningPrice}.");
             }
             Stop();

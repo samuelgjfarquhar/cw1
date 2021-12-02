@@ -10,15 +10,16 @@ namespace CW1
     public class HouseholdAgent : Agent
     {
         private int _valuation;
+        
 
-        public HouseholdAgent(int val)
+        public HouseholdAgent()
         {
-            _valuation = val;
+           
         }
 
         public override void Setup()
         {
-            Console.WriteLine($"[{Name}]: My valuation is {_valuation}");
+                          
         }
 
         public override void Act(Message message)
@@ -30,15 +31,15 @@ namespace CW1
 
                 switch (action)
                 {
-                    case "start":
+                   case "start":
                         HandleStart();
+                        string[] inform = parameters.Split(' ');
+                        int energyDemand = Int32.Parse(inform[0]);
+                        int energyGenerated = Int32.Parse(inform[1]);
+                        int utilityBuy = Int32.Parse(inform[2]);
+                        int utilitySell = Int32.Parse(inform[3]);
                         break;
-
-                    case "winner":
-                        HandleWinner(parameters);
-                        break;
-
-                    default:
+                   default:
                         break;
                 }
             }
@@ -50,7 +51,16 @@ namespace CW1
 
         private void HandleStart()
         {
-            Send("auctioneer", $"bid {_valuation}");
+            Send("env", "start", "start");
+            if (_valuation <= 0)
+            {
+                Console.WriteLine($"[{Name}]: im buying {_valuation} kw/h");
+            }
+            else
+            {
+                Console.WriteLine($"[{Name}]: im selling {_valuation} kw/h");
+            }
+            //Send("auctioneer", $"bid {_valuation}");
         }
 
         private void HandleWinner(string winner)

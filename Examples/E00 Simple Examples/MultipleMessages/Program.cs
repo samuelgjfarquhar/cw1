@@ -1,4 +1,5 @@
 ﻿using ActressMas;
+using System;
 
 namespace MultipleMessages
 {
@@ -20,6 +21,7 @@ namespace MultipleMessages
             }
 
             env.Start();
+            Console.ReadKey();
         }
     }
 }

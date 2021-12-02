@@ -27,6 +27,7 @@ namespace SendingObjects
             var a1 = new Agent1(); env.Add(a1, "a1");
             var a2 = new Agent2(); env.Add(a2, "a2");
             env.Start();
+            Console.ReadKey();
         }
     }
 
@@ -83,4 +84,6 @@ namespace SendingObjects
             Thread.Sleep(100);
         }
     }
+
+    
 }

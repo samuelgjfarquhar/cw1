@@ -14,15 +14,15 @@ namespace CW1
             var env = new EnvironmentMas();
             var settings = new EnvironmentAgent();
             var rand = new Random();
-
+            
+            var envAgent = new EnvironmentAgent(); env.Add(envAgent, "env");
+            var auctioneerAgent = new AuctioneerAgent(); env.Add(auctioneerAgent, "auctioneer");
             for (int i = 1; i <= EnvironmentAgent.NumberOfHouseholds; i++)
             {
-                int agentValuation = EnvironmentAgent.MinDemand + rand.Next(EnvironmentAgent.MaxDemand - EnvironmentAgent.MinDemand);
-                var householdAgent = new HouseholdAgent(agentValuation);
-                env.Add(householdAgent, $"bidder{i:D2}");
+                var hsAgent = new HouseholdAgent();
+                env.Add(hsAgent, $"household{i:D2}");
             }
-            var auctioneerAgent = new AuctioneerAgent();
-            env.Add(auctioneerAgent, "auctioneer");
+           
             env.Start();
 
             Console.ReadKey();
