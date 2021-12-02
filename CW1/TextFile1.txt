@@ -1,0 +1,20 @@
+﻿TODO
+
+Each Household Agent should send message with start
+Enviorment agent will then reply with:
+	1. How many kilowatt hours (kWhs) of electricity that household needs on that day;
+	2. How many kWhs of electricity it will be able to generate from its own renewable
+	energy source on that day;
+	3. The price per kWh for it to buy non-renewable energy (e.g. from a coal power
+	station) from its utility company on that day;
+	4. The price per kWh that it can sell any unused electricity that it has generated back to
+	its utility company.
+Then, each household agent will determine if it generates more or less
+	MORE: they will act as a *seller*
+		They sell the left over kw/H to household buyers or utility companys
+	LESS: they will act as a *buyer*
+		They buy the remaining difference of kw/H to meet the expectation that they would use that day.
+
+kw/H are in lots of 1
+
+
