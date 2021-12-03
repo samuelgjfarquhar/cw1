@@ -35,15 +35,18 @@ namespace CW1
                         int utilityBuy = Int32.Parse(inform[2]);
                         int utilitySell = Int32.Parse(inform[3]);
                         int energyRemaining = energyGenerated - energyDemand;
-                        if (energyRemaining <= 0)
+                        if (energyRemaining < 0)
                         {
                             //Console.WriteLine($"[{Name}]: im buying {energyRemaining} kw/h");
                             Send("auctioneer", $"buying {energyRemaining}");
+                            Send("auctioneer", $"buyElectric {utilityBuy}");
                         }
                         else
                         {
                             //Console.WriteLine($"[{Name}]: im selling {energyRemaining} kw/h");
                             Send("auctioneer", $"selling {energyRemaining}");
+                            Send("auctioneer", $"sellElectric {utilitySell}");
+
                         }
                         //Send("auctioneer", $"auction {energyRemaining}");
                         break;
@@ -61,6 +64,7 @@ namespace CW1
         {
             
         }
+
 
         private void HandleWinner(string winner)
         {
