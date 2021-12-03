@@ -99,7 +99,7 @@ namespace CW1
                 //Console.WriteLine($"\t{message.Format()}");
                 message.Parse(out string action, out string parameters);
                 int param = Convert.ToInt32(parameters);
-                
+
                 switch (action)
                 {
                     case "auction":
@@ -149,13 +149,13 @@ namespace CW1
         private void HandleSelling(string sender, int price)
         {
             _sellerbids.Add(new SellerBid(sender, price));
-            
+
         }
 
         private void HandleBuying(string sender, int price)
         {
             _buyerbids.Add(new BuyerBid(sender, price));
-            
+
         }
 
         private void HandleBuyingElectric(string sender, int price)
@@ -177,8 +177,6 @@ namespace CW1
             string highestBidderBuyer = "";
             int highestBid = int.MinValue;
             int highestBidBuyer = int.MinValue;
-            int kwhUtilitySell;
-            int kwhUtilityBuy;
             int[] bidValues = new int[_bids.Count];
             int[] sellerbidValues = new int[_sellerbids.Count];
             int[] buyerbidValues = new int[_buyerbids.Count];
@@ -198,16 +196,16 @@ namespace CW1
                     {
                         highestBid = b;
                         highestBidder = _sellerbids[i].SellerBidder;
-                        
+
                     }
                     sellerbidValues[i] = b;
                     electricsellerbidValues[i] = sel;
                 }
             }
 
-            if(_buyerbids.Count > 0)
+            if (_buyerbids.Count > 0)
             {
-                for(int i = 0; i < _buyerbids.Count; i++)
+                for (int i = 0; i < _buyerbids.Count; i++)
                 {
                     int buy = _buyerbids[i].BuyerBidValue;
                     int bee = _electricbuyerbids[i].ElectricBuyerBidValue;
@@ -216,13 +214,13 @@ namespace CW1
                     {
                         highestBidBuyer = buy;
                         highestBidderBuyer = _buyerbids[i].BuyerBidder;
-                        
+
                     }
                     buyerbidValues[i] = buy;
                     electricbuyerbidValues[i] = bee;
 
                 }
-                
+
             }
 
             if (highestBidder == "") // no bids above reserve price
@@ -239,33 +237,33 @@ namespace CW1
                 int kwhSell = sellerbidValues[0]; // first price
                 int kwhNeeded = buyerbidValues[0];
                 int kwhRemaining = kwhNeeded - kwhSell;
-                
-                
+
+
                 if (kwhRemaining > 0)
                 {
                     int utilKwhSell = electricsellerbidValues[0] * kwhRemaining;
                     Console.WriteLine($"[auctioneer]: Auction finished. {highestBidder} sold {kwhNeeded}kw/h to {highestBidderBuyer} who had {kwhSell}kw/h and sold the remianing {kwhRemaining} to utlity company for {utilKwhSell}p");// sell utility
 
                 }
-                if(kwhRemaining == 0)
+                if (kwhRemaining == 0)
                 {
                     //remove agent
                     Console.WriteLine($"removed agent {highestBidder} and {highestBidderBuyer}");
                 }
-                if(kwhRemaining < 0)
+                if (kwhRemaining < 0)
                 {
                     kwhRemaining = kwhRemaining * -1;
-                    
+
                     int utilKwhBuy = electricbuyerbidValues[0] * kwhRemaining;
                     Console.WriteLine($"[auctioneer]: Auction finished. {highestBidderBuyer} sold {kwhNeeded}kw/h to {highestBidder} who needed {kwhSell}kw/h and bought a remaining {kwhRemaining}kw/h from utlity company for {utilKwhBuy}p");// buy utility
                 }
                 //Console.WriteLine($"[auctioneer]: Auction finished. {highestBidder} sold {kwhSell}kw/h to {highestBidderBuyer} who needed {kwhNeeded}kw/h");
-                
+
             }
 
             Stop();
-           
+
         }
-        
+
     }
 }
