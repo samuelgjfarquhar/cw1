@@ -18,15 +18,42 @@ namespace CW1
             {
                 Bidder = bidder;
                 BidValue = bidValue;
-                
             }
         }
 
+        private struct BuyerBid
+        {
+            public string BuyerBidder { get; set; }
+            public int BuyerBidValue { get; set; }
+
+            public BuyerBid(string bidder, int bidValue)
+            {
+                BuyerBidder = bidder;
+                BuyerBidValue = bidValue;
+            }
+        }
+
+        private struct SellerBid
+        {
+            public string SellerBidder { get; set; }
+            public int SellerBidValue { get; set; }
+
+            public SellerBid(string bidder, int bidValue)
+            {
+                SellerBidder = bidder;
+                SellerBidValue = bidValue;
+            }
+        }
+
+        private List<SellerBid> _sellerbids;
+        private List<BuyerBid> _buyerbids;
         private List<Bid> _bids;
         private int _turnsToWait;
 
         public AuctioneerAgent()
         {
+            _sellerbids = new List<SellerBid>();
+            _buyerbids = new List<BuyerBid>();
             _bids = new List<Bid>();
         }
 
@@ -84,13 +111,13 @@ namespace CW1
 
         private void HandleSelling(string sender, int price)
         {
-            _bids.Add(new Bid(sender, price));
+            _sellerbids.Add(new SellerBid(sender, price));
             
         }
 
         private void HandleBuying(string sender, int price)
         {
-            _bids.Add(new Bid(sender, price));
+            _buyerbids.Add(new BuyerBid(sender, price));
             
         }
 
@@ -99,16 +126,23 @@ namespace CW1
             string highestBidder = "";
             int highestBid = int.MinValue;
             int[] bidValues = new int[_bids.Count];
-
-            for (int i = 0; i < _bids.Count; i++)
+            int[] sellerbidValues = new int[_sellerbids.Count];
+            int[] buyerbidValues = new int[_buyerbids.Count];
+            Console.WriteLine("sellers " + _sellerbids.Count);
+            Console.WriteLine("buyers " + _buyerbids.Count);
+            
+            if(_sellerbids.Count > 0)
             {
-                int b = _bids[i].BidValue;
-                if (b > highestBid && b >= -10)
+                for (int i = 0; i < _sellerbids.Count; i++)
                 {
-                    highestBid = b;
-                    highestBidder = _bids[i].Bidder;
+                    int b = _sellerbids[i].SellerBidValue;
+                    if (b > highestBid && b >= -10)
+                    {
+                        highestBid = b;
+                        highestBidder = _sellerbids[i].SellerBidder;
+                    }
+                    sellerbidValues[i] = b;
                 }
-                bidValues[i] = b;
             }
 
             if (highestBidder == "") // no bids above reserve price
@@ -118,12 +152,38 @@ namespace CW1
             }
             else
             {
-                Array.Sort(bidValues);
-                Array.Reverse(bidValues);
-                int winningPrice = bidValues[0]; // first price
-                Console.WriteLine($"[auctioneer]: Auction finished. Sold to {highestBidder} for price {winningPrice}.");
+                Array.Sort(sellerbidValues);
+                Array.Reverse(sellerbidValues);
+                int winningPrice = sellerbidValues[0]; // first price
+                Console.WriteLine($"[auctioneer]: Auction finished. {winningPrice}kw/h sold to {highestBidder}");
             }
+
             Stop();
+            
+            //for (int i = 0; i < _bids.Count; i++)
+            //{
+            //    int b = _bids[i].BidValue;
+            //    if (b > highestBid && b >= -10)
+            //    {
+            //        highestBid = b;
+            //        highestBidder = _bids[i].Bidder;
+            //    }
+            //    bidValues[i] = b;
+            //}
+
+            //if (highestBidder == "") // no bids above reserve price
+            //{
+            //    Console.WriteLine("[auctioneer]: Auction finished. No winner.");
+            //    Broadcast("winner none");
+            //}
+            //else
+            //{
+            //    Array.Sort(bidValues);
+            //    Array.Reverse(bidValues);
+            //    int winningPrice = bidValues[0]; // first price
+            //    Console.WriteLine($"[auctioneer]: Auction finished. Sold to {highestBidder} for price {winningPrice}.");
+            //}
+           
         }
         
     }
