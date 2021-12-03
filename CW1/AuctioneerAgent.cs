@@ -18,6 +18,7 @@ namespace CW1
             {
                 Bidder = bidder;
                 BidValue = bidValue;
+                
             }
         }
 
@@ -39,22 +40,34 @@ namespace CW1
         {
             try
             {
-                Console.WriteLine($"\t{message.Format()}");
+                //Console.WriteLine($"\t{message.Format()}");
                 message.Parse(out string action, out string parameters);
-
+                int kwh = Convert.ToInt32(parameters);
+                
                 switch (action)
                 {
-                    case "bid":
+                    case "auction":
                         HandleBid(message.Sender, Convert.ToInt32(parameters));
                         break;
-
+                    case "buying":
+                        if (kwh < 0)
+                        {
+                            kwh = kwh * (-1);
+                        }
+                        HandleBuying(message.Sender, Convert.ToInt32(parameters));
+                        Console.WriteLine($"[{message.Sender}]: buying {kwh}");
+                        break;
+                    case "selling":
+                        HandleSelling(message.Sender, Convert.ToInt32(parameters));
+                        Console.WriteLine($"[{message.Sender}]: selling {kwh}");
+                        break;
                     default:
                         break;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                //Console.WriteLine(ex.Message);
             }
         }
 
@@ -69,6 +82,18 @@ namespace CW1
             _bids.Add(new Bid(sender, price));
         }
 
+        private void HandleSelling(string sender, int price)
+        {
+            _bids.Add(new Bid(sender, price));
+            
+        }
+
+        private void HandleBuying(string sender, int price)
+        {
+            _bids.Add(new Bid(sender, price));
+            
+        }
+
         private void HandleFinish()
         {
             string highestBidder = "";
@@ -78,7 +103,7 @@ namespace CW1
             for (int i = 0; i < _bids.Count; i++)
             {
                 int b = _bids[i].BidValue;
-                if (b > highestBid && b >= EnvironmentAgent.MinDemand)
+                if (b > highestBid && b >= -10)
                 {
                     highestBid = b;
                     highestBidder = _bids[i].Bidder;
@@ -100,5 +125,6 @@ namespace CW1
             }
             Stop();
         }
+        
     }
 }

@@ -9,9 +9,6 @@ namespace CW1
 {
     public class HouseholdAgent : Agent
     {
-        private int _valuation;
-        
-
         public HouseholdAgent()
         {
            
@@ -19,7 +16,7 @@ namespace CW1
 
         public override void Setup()
         {
-                          
+            Send("env", "start");
         }
 
         public override void Act(Message message)
@@ -31,13 +28,24 @@ namespace CW1
 
                 switch (action)
                 {
-                   case "start":
-                        HandleStart();
+                   case "inform":
                         string[] inform = parameters.Split(' ');
-                        int energyDemand = Int32.Parse(inform[0]);
+                        int energyDemand = Int32.Parse(inform[0]);                        
                         int energyGenerated = Int32.Parse(inform[1]);
                         int utilityBuy = Int32.Parse(inform[2]);
                         int utilitySell = Int32.Parse(inform[3]);
+                        int energyRemaining = energyGenerated - energyDemand;
+                        if (energyRemaining <= 0)
+                        {
+                            //Console.WriteLine($"[{Name}]: im buying {energyRemaining} kw/h");
+                            Send("auctioneer", $"buying {energyRemaining}");
+                        }
+                        else
+                        {
+                            //Console.WriteLine($"[{Name}]: im selling {energyRemaining} kw/h");
+                            Send("auctioneer", $"selling {energyRemaining}");
+                        }
+                        //Send("auctioneer", $"auction {energyRemaining}");
                         break;
                    default:
                         break;
@@ -51,16 +59,7 @@ namespace CW1
 
         private void HandleStart()
         {
-            Send("env", "start", "start");
-            if (_valuation <= 0)
-            {
-                Console.WriteLine($"[{Name}]: im buying {_valuation} kw/h");
-            }
-            else
-            {
-                Console.WriteLine($"[{Name}]: im selling {_valuation} kw/h");
-            }
-            //Send("auctioneer", $"bid {_valuation}");
+            
         }
 
         private void HandleWinner(string winner)
