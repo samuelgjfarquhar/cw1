@@ -124,7 +124,9 @@ namespace CW1
         private void HandleFinish()
         {
             string highestBidder = "";
+            string highestBidderBuyer = "";
             int highestBid = int.MinValue;
+            int highestBidBuyer = int.MinValue;
             int[] bidValues = new int[_bids.Count];
             int[] sellerbidValues = new int[_sellerbids.Count];
             int[] buyerbidValues = new int[_buyerbids.Count];
@@ -145,6 +147,23 @@ namespace CW1
                 }
             }
 
+            if(_buyerbids.Count > 0)
+            {
+                for(int i = 0; i < _buyerbids.Count; i++)
+                {
+                    int buy = _buyerbids[i].BuyerBidValue;
+                    buy = buy * -1;
+                    if (buy > highestBidBuyer && buy <= 10)
+                    {
+                        highestBidBuyer = buy;
+                        highestBidderBuyer = _buyerbids[i].BuyerBidder;
+                    }
+                    buyerbidValues[i] = buy;
+
+                }
+                
+            }
+
             if (highestBidder == "") // no bids above reserve price
             {
                 Console.WriteLine("[auctioneer]: Auction finished. No winner.");
@@ -154,35 +173,15 @@ namespace CW1
             {
                 Array.Sort(sellerbidValues);
                 Array.Reverse(sellerbidValues);
-                int winningPrice = sellerbidValues[0]; // first price
-                Console.WriteLine($"[auctioneer]: Auction finished. {winningPrice}kw/h sold to {highestBidder}");
+                Array.Sort(buyerbidValues);
+                Array.Reverse(buyerbidValues);
+                int kwhSell = sellerbidValues[0]; // first price
+                int kwhNeeded = buyerbidValues[0];
+
+                Console.WriteLine($"[auctioneer]: Auction finished. {kwhSell}kw/h sold to {highestBidderBuyer} buying {kwhNeeded}");
             }
 
             Stop();
-            
-            //for (int i = 0; i < _bids.Count; i++)
-            //{
-            //    int b = _bids[i].BidValue;
-            //    if (b > highestBid && b >= -10)
-            //    {
-            //        highestBid = b;
-            //        highestBidder = _bids[i].Bidder;
-            //    }
-            //    bidValues[i] = b;
-            //}
-
-            //if (highestBidder == "") // no bids above reserve price
-            //{
-            //    Console.WriteLine("[auctioneer]: Auction finished. No winner.");
-            //    Broadcast("winner none");
-            //}
-            //else
-            //{
-            //    Array.Sort(bidValues);
-            //    Array.Reverse(bidValues);
-            //    int winningPrice = bidValues[0]; // first price
-            //    Console.WriteLine($"[auctioneer]: Auction finished. Sold to {highestBidder} for price {winningPrice}.");
-            //}
            
         }
         

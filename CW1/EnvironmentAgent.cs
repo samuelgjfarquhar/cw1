@@ -22,7 +22,7 @@ class EnvironmentAgent : Agent
     public const int MaxPriceToBuyFromUtility = 22; //max possible price to buy 1kWh from the utility company (in pence)
     public const int MinPriceToSellToUtility = 2; //min possible price to sell 1kWh to the utility company (in pence)
     public const int MaxPriceToSellToUtility = 5; //max possible price to sell 1kWh to the utility company (in pence)
-    public const int NumberOfHouseholds = 10;
+    public const int NumberOfHouseholds = 17;
     public const int NumberofUtility = 5;
 
     public override void Act(Message message)
